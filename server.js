@@ -31,3 +31,7 @@ let app = http.createServer(
 
 console.log('The server is running');
 
+app.getConnections('/', (req, res) => {
+    res.send('Hellow World!');
+})
+
