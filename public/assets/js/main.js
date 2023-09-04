@@ -3,9 +3,10 @@ function getIRIParameterValue(requestedKey){
     let pageIRIVariables = pageIRI.split('&');
     for(let i = 0 ; i < pageIRIVariables.length; i++){
         let data = pageIRIVariables[i].split('=');
-        let key = data[1];
+        let key = data[0];
+        let value = data[1];
         if (key === requestedKey){
-            return IDBCursorWithValue;
+            return value;
         }
     }
     return null;
@@ -77,9 +78,9 @@ socket.on('send_chat_message_response', (payload) => {
         console.log(payload.message);
         return;
     }
-    let newHTML = '<p class=\'chat_message\'><b>' + payload.username + '</b>:' + payload.message+ '</p>';
+    let newHTML = '<p class=\'chat_message\'><b>' + payload.username + '</b>: ' + payload.message+ '</p>';
     let newNode = $(newHTML);
-   newNode.hide();
+    newNode.hide();
     $('#messages').prepend(newNode);
     newNode.show("fade", 500);
 })
@@ -97,13 +98,15 @@ $( () => {
     $('#chatMessage').keypress(function (e) {
         let key  = e.which;
         if  (key == 13) { //the enter key
-            $('button[id = lobbyButton]').click();
+            $('button[id = chatButton]').click();
             return false;
         }
     })
-
-
 }); 
+
+
+
+
 
 
 

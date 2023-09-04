@@ -112,7 +112,7 @@ or
         /* Make sure the client was put in the room*/
         io.in(room).fetchSockets().then((sockets)=> {
             /* Socket didn't join the room */
-            if ((typeof sockets == 'undefine') || (sockets === null) || !sockets.includes(sockets)){
+            if ((typeof sockets == 'undefine') || (sockets === null) || !sockets.includes(socket)){
                 response = {};
                 response.result= 'fail';
                 response.message = 'Server internal error joining chat room';
@@ -126,7 +126,7 @@ or
                     room: room
                 }
                 /*Announce to everyone that is in the room, who else is in the room*/
-                for (const member in sockets){
+                for (const member of sockets){
                     response = {
                         result: 'success',
                         socket_id: member.id,
@@ -144,8 +144,8 @@ or
 
 
     socket.on('disconnect', () => {
-        serverLog('a page disconnected from the server:' + socket.id);
-        if((typeof player[socket.id] !='undefined') && (players[socket.id] != null)){
+        serverLog('a page disconnected from the server: ' + socket.id);
+        if((typeof players[socket.id] !='undefined') && (players[socket.id] != null)){
             let payload = {
                 username: players[socket.id].username,
                 room: players[socket.id].room,
