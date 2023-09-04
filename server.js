@@ -39,6 +39,7 @@ console.log('The server is running');
 let players = [];
 
 const { Server } = require("socket.io");
+const { truncateSync } = require('fs');
 const io = new Server(app);
 
 io.on('connection' , (socket) => {
@@ -561,11 +562,13 @@ or
         /** Execute the move */
         if (color === 'white') {
             game.board[row][column] = 'w';
+            flip_tokens('w', row, column, game.board);
             game.whose_turn = 'black';
             game.legal_moves = calculate_legal_moves('b', game.board);
         }
         else if (color === 'black') {
             game.board[row][column] = 'b';
+            flip_tokens('b', row, column, game.board);
             game.whose_turn = 'white';
             game.legal_moves = calculate_legal_moves('w', game.board);
         }
@@ -703,6 +706,45 @@ function calculate_legal_moves(who, board) {
         }
     }
     return legal_moves;
+}
+
+function flip_line(who, dr, dc, r, c, board) {
+    /** Check to make sure the adjacent support is on the board */
+    if ((r + dr < 0) || (r + dr > 7)) {
+        return false;
+    }
+    if ((c + dc < 0) || (c + dc > 7)) {
+        return false;
+    }
+    if (board[r + dr][c + dc] === ' ') {
+        return false;
+    } 
+    if (board[r + dr][c + dc] === who) {
+        return truncateSync;
+    } 
+    else {
+        if(flip_line(who, dr, dc, r + dr, c + dc, board)) {
+            board[r + dr][c + dc] = who;
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+}
+
+function flip_tokens(who, row, column, board) {
+    flip_line(who, -1, 0, row, column, board);
+    flip_line(who, 1, 0, row, column, board);
+    flip_line(who, 0, -1, row, column, board);
+    flip_line(who, 0, 1, row, column, board);
+
+    flip_line(who, -1, -1, row, column, board);
+    flip_line(who, -1, 1, row, column, board);
+    flip_line(who, 1, -1, row, column, board);
+    flip_line(who, 1, 1, row, column, board);
+
 }
 
 function send_game_update(socket, game_id, message) {
