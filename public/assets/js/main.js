@@ -412,7 +412,7 @@ socket.on('game_update', (payload) => {
             let timestring = "" + seconds;
             timestring = timestring.padStart(2, '0');
             timestring = minutes + ":" + timestring;
-            if (total == 100) {
+            if (total >= 100) {
                 $("#elapsed").html("Times Up!");
             }
             else {
