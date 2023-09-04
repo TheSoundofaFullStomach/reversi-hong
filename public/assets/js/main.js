@@ -190,7 +190,7 @@ socket.on('join_room_response', (payload) =>{
     nodeA.show("fade", 1000);
 
     /* Announcing in the chat that someone has arrived*/
-    let newHTML = '<p class= \'join_room_response\'>'+payload.username+' joined the '+payload.room+'. (There are '+payload.count+' users in this room)</p>';
+    let newHTML = '<p class= \'join_room_response\'>'+payload.username+' joined the chatroom. (There are '+payload.count+' users in this room)</p>';
     let newNode = $(newHTML);
     newNode.hide();
 
